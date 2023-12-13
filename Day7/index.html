@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day7</title>
+  </head>
+  <body>
+    <input type="file" id="fileInput" />
+    <script>
+      const readFile = (file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsText(file);
+        });
+      };
+
+      document.getElementById("fileInput").addEventListener("change", async (e) => {
+        const file = e.target.files[0];
+        const contents = await readFile(file);
+
+        const cards = contents.split("\n");
+
+        let newHand = [];
+
+        for (card of cards) {
+          let [hand, bid] = card.split(" ");
+
+          newHand = hand.split("");
+          // console.log("hand: ", newHand);
+
+          let count;
+
+          // check the cards
+          if (newHand.every((sign) => sign === hand[0])) {
+            console.log("five");
+          } else if (
+            ((count = {}),
+            newHand.forEach((sign) => {
+              count[sign] = (count[sign] || 0) + 1;
+            }),
+            Object.values(count).includes(4))
+          ) {
+            console.log("four");
+          } else if (
+            ((count = {}),
+            newHand.forEach((sign) => {
+              count[sign] = (count[sign] || 0) + 1;
+            }),
+            Object.values(count).includes(3) && Object.values(count).includes(2))
+          ) {
+            console.log("full house");
+          } else if (
+            ((count = {}),
+            newHand.forEach((sign) => {
+              count[sign] = (count[sign] || 0) + 1;
+            }),
+            Object.values(count).includes(3))
+          ) {
+            console.log("three");
+          } else if (
+            ((count = {}),
+            newHand.forEach((sign) => {
+              count[sign] = (count[sign] || 0) + 1;
+            }),
+            Object.values(count).filter((x) => x === 2).length === 2)
+          ) {
+            console.log("two pair");
+          } else if (
+            ((count = {}),
+            newHand.forEach((sign) => {
+              count[sign] = (count[sign] || 0) + 1;
+            }),
+            Object.values(count).includes(2))
+          ) {
+            console.log("one pair");
+          } else if (newHand.every((sign, index, self) => self.indexOf(sign) === index)) {
+            console.log("high");
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
