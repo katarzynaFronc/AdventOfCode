@@ -24,18 +24,28 @@
         const cards = contents.split("\n");
 
         let newHand = [];
+        let order;
+        let camelCard = {};
+        let camelCards = [];
+        let sortedCards;
 
         for (card of cards) {
           let [hand, bid] = card.split(" ");
+          let newBid = bid.toString().replace("\r", "");
 
           newHand = hand.split("");
           // console.log("hand: ", newHand);
+
+          camelCard = { hand: hand, bid: newBid, order: order };
+
+          // console.log(camelCard);
 
           let count;
 
           // check the cards
           if (newHand.every((sign) => sign === hand[0])) {
-            console.log("five");
+            camelCard = { ...camelCard, order: "1" };
+            console.log(camelCard, "five");
           } else if (
             ((count = {}),
             newHand.forEach((sign) => {
@@ -43,7 +53,8 @@
             }),
             Object.values(count).includes(4))
           ) {
-            console.log("four");
+            camelCard = { ...camelCard, order: "2" };
+            console.log(camelCard, "four");
           } else if (
             ((count = {}),
             newHand.forEach((sign) => {
@@ -51,7 +62,8 @@
             }),
             Object.values(count).includes(3) && Object.values(count).includes(2))
           ) {
-            console.log("full house");
+            camelCard = { ...camelCard, order: "3" };
+            console.log(camelCard, "full house");
           } else if (
             ((count = {}),
             newHand.forEach((sign) => {
@@ -59,7 +71,8 @@
             }),
             Object.values(count).includes(3))
           ) {
-            console.log("three");
+            camelCard = { ...camelCard, order: "4" };
+            console.log(camelCard, "three");
           } else if (
             ((count = {}),
             newHand.forEach((sign) => {
@@ -67,7 +80,8 @@
             }),
             Object.values(count).filter((x) => x === 2).length === 2)
           ) {
-            console.log("two pair");
+            camelCard = { ...camelCard, order: "5" };
+            console.log(camelCard, "two pair");
           } else if (
             ((count = {}),
             newHand.forEach((sign) => {
@@ -75,11 +89,19 @@
             }),
             Object.values(count).includes(2))
           ) {
-            console.log("one pair");
+            camelCard = { ...camelCard, order: "6" };
+            console.log(camelCard, "one pair");
           } else if (newHand.every((sign, index, self) => self.indexOf(sign) === index)) {
-            console.log("high");
+            camelCard = { ...camelCard, order: "7" };
+            console.log(camelCard, "high");
           }
+          camelCards.push(camelCard);
         }
+
+        sortedCards = camelCards.sort(function (a, b) {
+          return a.order - b.order;
+        });
+        console.log(sortedCards);
       });
     </script>
   </body>
