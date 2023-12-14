@@ -20,9 +20,10 @@
       document.getElementById("fileInput").addEventListener("change", async (e) => {
         const file = e.target.files[0];
         const contents = await readFile(file);
-
         const cards = contents.split("\n");
 
+        let hand;
+        let bid;
         let newHand = [];
         let order;
         let camelCard = {};
@@ -30,7 +31,7 @@
         let sortedCards;
 
         for (card of cards) {
-          let [hand, bid] = card.split(" ");
+          [hand, bid] = card.split(" ");
           let newBid = bid.toString().replace("\r", "");
 
           newHand = hand.split("");
@@ -44,7 +45,7 @@
 
           // check the cards
           if (newHand.every((sign) => sign === hand[0])) {
-            camelCard = { ...camelCard, order: "1" };
+            camelCard = { ...camelCard, order: "7" };
             console.log(camelCard, "five");
           } else if (
             ((count = {}),
@@ -53,7 +54,7 @@
             }),
             Object.values(count).includes(4))
           ) {
-            camelCard = { ...camelCard, order: "2" };
+            camelCard = { ...camelCard, order: "6" };
             console.log(camelCard, "four");
           } else if (
             ((count = {}),
@@ -62,7 +63,7 @@
             }),
             Object.values(count).includes(3) && Object.values(count).includes(2))
           ) {
-            camelCard = { ...camelCard, order: "3" };
+            camelCard = { ...camelCard, order: "5" };
             console.log(camelCard, "full house");
           } else if (
             ((count = {}),
@@ -80,7 +81,7 @@
             }),
             Object.values(count).filter((x) => x === 2).length === 2)
           ) {
-            camelCard = { ...camelCard, order: "5" };
+            camelCard = { ...camelCard, order: "3" };
             console.log(camelCard, "two pair");
           } else if (
             ((count = {}),
@@ -89,17 +90,30 @@
             }),
             Object.values(count).includes(2))
           ) {
-            camelCard = { ...camelCard, order: "6" };
+            camelCard = { ...camelCard, order: "2" };
             console.log(camelCard, "one pair");
           } else if (newHand.every((sign, index, self) => self.indexOf(sign) === index)) {
-            camelCard = { ...camelCard, order: "7" };
+            camelCard = { ...camelCard, order: "1" };
             console.log(camelCard, "high");
           }
           camelCards.push(camelCard);
         }
 
+        // sort
+
         sortedCards = camelCards.sort(function (a, b) {
-          return a.order - b.order;
+          if (a.order !== b.order) return a.order < b.order ? -1 : 1;
+          if (a.order === b.order) {
+            const handA = a.hand.split("");
+            const handB = b.hand.split("");
+            const cardOrder = { A: 13, K: 12, Q: 11, J: 10, T: 9, 9: 8, 8: 7, 7: 6, 6: 5, 5: 4, 4: 3, 3: 2, 2: 1 };
+
+            for (let i = 0; i < handA.length; i++) {
+              if (cardOrder[handA[i]] !== cardOrder[handB[i]]) {
+                return cardOrder[handA[i]] < cardOrder[handB[i]] ? -1 : 1;
+              }
+            }
+          }
         });
         console.log(sortedCards);
       });
