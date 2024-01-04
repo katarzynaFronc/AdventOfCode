@@ -28,8 +28,6 @@
         let mapa = instructions.slice(2);
         mapa = mapa.map((i) => i.replace(/\r/g, "")).filter((i) => i !== "");
 
-        // console.log(steps, mapa);
-
         let objects = mapa.map((i) => {
           let parts = i.split(" = ");
 
@@ -44,16 +42,24 @@
           };
         });
 
-        // console.log(steps, objects);
+        let start = objects[0].code;
+        let end = objects[objects.length - 1].code;
 
-        let move = steps.map((i) => {
-          if (i === "R") {
-            return objects.map((obj) => obj.right);
-          } else if (i === "L") {
-            return objects.map((obj) => obj.left);
+        let stepsCount = 0;
+        let stepsIndex = 0;
+        let currentNode = start;
+
+        while (currentNode !== end) {
+          let currentObject = objects.find((obj) => obj.code === currentNode);
+          if (steps[stepsIndex] === "R") {
+            currentNode = currentObject.right;
+          } else {
+            currentNode = currentObject.left;
           }
-        });
-        console.log("move: ", move);
+          stepsCount++;
+          stepsIndex = (stepsIndex + 1) % steps.length;
+        }
+        console.log(stepsCount);
       });
     </script>
   </body>
