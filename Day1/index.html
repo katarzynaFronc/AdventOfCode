@@ -3,37 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Day1</title>
   </head>
   <body>
-    <input type="text" id="inputData" />
-    <button type="submit" onclick="calibration()">submit</button>
-
-    <script>
-      const calibration = () => {
-        const inputData = document.querySelector("#inputData").value;
-
-        const line = inputData.split(" ");
-        const newLine = [];
-
-        line.map((i) => {
-          let numbers = i.replace(/[^0-9]/g, "");
-          newLine.push(numbers);
-        });
-        console.log(newLine);
-        let sum = 0;
-
-        newLine.map((j) => {
-          const firstDigit = j.charAt(0) * 10;
-          const lastDigit = parseInt(j.charAt(j.length - 1));
-
-          let num = firstDigit + lastDigit;
-
-          sum += num;
-        });
-
-        console.log(sum);
-      };
-    </script>
+    <input type="file" id="fileInput" />
+    <script src="./script.js"></script>
   </body>
 </html>
